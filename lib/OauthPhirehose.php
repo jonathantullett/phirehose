@@ -27,8 +27,8 @@ abstract class OauthPhirehose extends Phirehose
 
     /**
     */
-	protected function prepareParameters($method = null, $url = null,
-		array $params)
+	protected function prepareParameters(array $params, $method = null,
+                                         $url = null)
 	{
 		if (empty($method) || empty($url))
 			return false;
@@ -121,13 +121,13 @@ abstract class OauthPhirehose extends Phirehose
 		$signatureBaseString = "{$method}&{$normalizedUrl}&{$concatenatedParams}";
 
 		# sign the signature string
-		$key = $this->encode_rfc3986($this->consumerSecret?$this->consumerSecret:TWITTER_CONSUMER_SECRET) . '&' . $this->encode_rfc3986($this->password);
+		$key = $this->encode_rfc3986($this->consumerSecret?:TWITTER_CONSUMER_SECRET) . '&' . $this->encode_rfc3986($this->password);
 		return base64_encode(hash_hmac('sha1', $signatureBaseString, $key, true));
 	}
 
 	protected function getOAuthHeader($method, $url, $params = array())
 	{
-		$params = $this->prepareParameters($method, $url, $params);
+		$params = $this->prepareParameters($params, $method, $url);
 		$oauthHeaders = $params['oauth'];
 
 		$urlParts = parse_url($url);
@@ -142,7 +142,7 @@ abstract class OauthPhirehose extends Phirehose
 	}
 
     /** Overrides base class function */
-	protected function getAuthorizationHeader($url,$requestParams)
+	protected function getAuthorizationHeader($url, $requestParams)
 	{
 		return $this->getOAuthHeader('POST', $url, $requestParams);
 	}
