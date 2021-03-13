@@ -10,7 +10,7 @@
   ],
   "type": "library",
   "homepage": "https://github.com/jonathantullett/phirehose",
-  "license": "GPL",
+  "license": "GPL-2.0-only",
   "authors": [
     {
       "name": "Fenn Bailey",
